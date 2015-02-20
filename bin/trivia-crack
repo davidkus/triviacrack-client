@@ -1,0 +1,22 @@
+#!/usr/bin/env ruby
+
+require "thor"
+require "triviacrack/client"
+
+class TriviaCrackClient < Thor
+
+  desc "bot", "Run the Trivia Crack bot."
+  method_option :email, aliases: "-e", require: true,
+                desc: "Your Trivia Crack account email."
+  method_option :password, aliases: "-p", require: true,
+                desc: "Your Trivia Crack account password."
+  method_option :decision_module, aliases: "-d", default: "CorrectAnswer",
+                desc: "Module that decides which answer to user."
+  def bot
+    bot = TriviaCrack::Client::Bot.new options[:email], options[:password]
+    bot.play options[:decision_module]
+  end
+
+end
+
+TriviaCrackClient.start
