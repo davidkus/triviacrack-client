@@ -1,6 +1,6 @@
-# Triviacrack::Client
+# TriviaCrack Client
 
-TODO: Write a gem description
+A bot that plays the popular social game Trivia Crack. Running the bot will go through all games which are currently on your turn and play them to completion.
 
 ## Installation
 
@@ -20,11 +20,16 @@ Or install it yourself as:
 
 ## Usage
 
-TODO: Write usage instructions here
+To run the bot, execute:
+
+$ trivia-crack bot -e EMAIL -p PASSWORD
+
+- EMAIL is the e-mail you use to sign in to Trivia Crack (e.g. user@example.com).
+- PASSWORD is your Trivia Crack account password.
 
 ## Contributing
 
-1. Fork it ( https://github.com/[my-github-username]/triviacrack-client/fork )
+1. Fork it ( https://github.com/davidkus/triviacrack-client/fork )
 2. Create your feature branch (`git checkout -b my-new-feature`)
 3. Commit your changes (`git commit -am 'Add some feature'`)
 4. Push to the branch (`git push origin my-new-feature`)
