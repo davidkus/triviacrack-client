@@ -10,11 +10,13 @@ class TriviaCrackClient < Thor
                 desc: "Your Trivia Crack account email."
   method_option :password, aliases: "-p", require: true,
                 desc: "Your Trivia Crack account password."
+  method_option :start_new_games, aliases: "-n", default: false,
+                desc: "Whether or not to start new games"
   method_option :decision_module, aliases: "-d", default: "CorrectAnswer",
                 desc: "Module that decides which answer to user."
   def bot
     bot = TriviaCrack::Client::Bot.new options[:email], options[:password]
-    bot.play options[:decision_module]
+    bot.play options[:decision_module], options[:start_new_games]
   end
 
 end

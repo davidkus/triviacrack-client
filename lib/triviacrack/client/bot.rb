@@ -15,7 +15,7 @@ module TriviaCrack
       #   trivia_bot.play
       #
       # Returns nothing.
-      def play(decision_module)
+      def play(decision_module, start_new_games)
         @decision_module =
           TriviaCrack::Client::DecisionModules.get_module(decision_module)
 
@@ -26,7 +26,7 @@ module TriviaCrack
             puts "Updating user information..."
             @user = @client.get_user
 
-            if @user.start_new_game?
+            if @user.start_new_game? && start_new_games
               start_new_game
             end
 
@@ -66,14 +66,35 @@ module TriviaCrack
           sleep(sleep_time)
 
           question = game.questions.first
-
-          display_question(question)
-
           answer = @decision_module.decide(@user, game, question)
 
-          game = answer_question(game, question, answer)
+          puts " Category : #{question.category}"
+          puts " Question : #{question.text}"
+          print "   Answer : #{question.answers[answer]} "
+
+          result = @client.answer_question game.id, question, answer
+
+          if result[:correct_answer]
+            puts "You answered correctly!"
+          else
+            puts "You answered incorretly!"
+          end
+
+          game = result[:game]
         end
         puts "Finished playing game #{game.id}. Status: #{game.game_status}."
+      end
+
+      # Internal: Starts a new game.
+      #
+      # Examples
+      #
+      #   start_new_game
+      #
+      # Returns nothing.
+      def start_new_game
+        puts "Starting a new game."
+        @client.start_new_game
       end
 
     end
