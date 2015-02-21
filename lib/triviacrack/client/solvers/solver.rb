@@ -3,10 +3,15 @@ require "triviacrack/client/decision_modules/random_answer"
 
 module TriviaCrack
   module Client
-    module DecisionModules
+    module Solvers
 
-      def self.get_module(name)
-        full_name = "TriviaCrack::Client::DecisionModules::#{name}"
+      # Public: Gets the solver by name.
+      #
+      # name  - The name of the solver.
+      #
+      # Returns the appropriate solver.
+      def self.get_solver(name)
+        full_name = "TriviaCrack::Client::Solvers::#{name}"
         clazz = full_name.split('::').inject(Object) { |o,c| o.const_get c }
         clazz.new
       end

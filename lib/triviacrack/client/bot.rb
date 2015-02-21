@@ -1,6 +1,6 @@
 require "triviacrack"
 require "triviacrack/client/client"
-require "triviacrack/client/decision_modules/decision_module.rb"
+require "triviacrack/client/solvers/solver"
 
 module TriviaCrack
   module Client
@@ -9,7 +9,7 @@ module TriviaCrack
       # Public: Runs the trivia bot, playing all currently available games to
       # completion.
       #
-      # decision_module  - The name of a decision module to use
+      # solver           - The name of a decision module to use
       # start_new_games  - A Boolean indacting whether or not to start new games
       #
       # Examples
@@ -18,9 +18,8 @@ module TriviaCrack
       #   trivia_bot.play "CorrectAnswer", false
       #
       # Returns nothing.
-      def play(decision_module, start_new_games)
-        @decision_module =
-          TriviaCrack::Client::DecisionModules.get_module(decision_module)
+      def play(solver, start_new_games)
+        @solver = TriviaCrack::Client::Solvers.get_solver(solver)
 
         begin
           puts "Starting to play Trivia Crack as #{@username}."
@@ -71,7 +70,7 @@ module TriviaCrack
           sleep sleep_time
 
           question = game.questions.first
-          answer = @decision_module.decide(@user, game, question)
+          answer = @solver.solve(@user, game, question)
 
           puts " Category : #{question.category}"
           puts " Question : #{question.text}"
