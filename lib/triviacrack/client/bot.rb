@@ -9,10 +9,13 @@ module TriviaCrack
       # Public: Runs the trivia bot, playing all currently available games to
       # completion.
       #
+      # decision_module  - The name of a decision module to use
+      # start_new_games  - A Boolean indacting whether or not to start new games
+      #
       # Examples
       #
       #   trivia_bot = TriviaCrackBot::Bot.new username, session_id
-      #   trivia_bot.play
+      #   trivia_bot.play "CorrectAnswer", false
       #
       # Returns nothing.
       def play(decision_module, start_new_games)
@@ -22,26 +25,25 @@ module TriviaCrack
         begin
           puts "Starting to play Trivia Crack as #{@username}."
 
-          while true do
-            puts "Updating user information..."
-            @user = @client.get_user
-
+          loop do
             if @user.start_new_game? && start_new_games
               start_new_game
             end
 
-            games = @client.get_games
+            puts "Fetching games for #{@username}..."
 
-            games.each do |game|
-              if game.playable?
-                play_game game
-              end
+            playable_games = @client.get_games.select { |game| game.playable? }
+
+            playable_games.each { |game| play_game game }
+
+            if playable_games.none?
+              puts "No games available to play."
             end
 
             sleep 60
           end
         rescue TriviaCrack::Errors::RequestError => e
-          puts "Request to the Trivia Crack API failed with code #{e.code}"
+          puts "Request to the Trivia Crack API failed with code #{e.code}."
         end
       end
 
@@ -57,32 +59,37 @@ module TriviaCrack
       #
       # Returns nothing.
       def play_game(game)
+
         puts "Playing game #{game.id} against #{game.opponent.username}."
+
         while game.playable? do
           # Sleep for a random number of seconds, so responses are not all
           # instantaneous and seem more natural.
           sleep_time = Random.rand(1..10)
           puts "\nWaiting #{sleep_time} seconds before the next question...\n\n"
-          sleep(sleep_time)
+
+          sleep sleep_time
 
           question = game.questions.first
           answer = @decision_module.decide(@user, game, question)
 
           puts " Category : #{question.category}"
           puts " Question : #{question.text}"
-          print "   Answer : #{question.answers[answer]} "
+          print "   Answer : #{question.answers[answer]}"
 
           result = @client.answer_question game.id, question, answer
 
           if result[:correct_answer]
-            puts "You answered correctly!"
+            puts " - You answered correctly!"
           else
-            puts "You answered incorretly!"
+            puts " - You answered incorretly!"
           end
 
           game = result[:game]
         end
+
         puts "Finished playing game #{game.id}. Status: #{game.game_status}."
+
       end
 
       # Internal: Starts a new game.
@@ -94,6 +101,7 @@ module TriviaCrack
       # Returns nothing.
       def start_new_game
         puts "Starting a new game."
+
         @client.start_new_game
       end
 
