@@ -1,9 +1,10 @@
+# Internal: A Solver that solves the question using the correct answer.
 module TriviaCrack
   module Client
     module Solvers
       class CorrectAnswer
 
-        # Public: Provides the correct answer to be used to solve the question.
+        # Internal: Provides the correct answer to be used to solve the question.
         #
         # user      - TriviaCrack::User
         # game      - TriviaCrack::Game

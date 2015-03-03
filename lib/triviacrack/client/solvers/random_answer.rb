@@ -1,9 +1,10 @@
+# Internal: A Solver that solves the question by using a random number.
 module TriviaCrack
   module Client
     module Solvers
       class RandomAnswer
 
-        # Public: Provides a random answer to the question.
+        # Internal: Provides a random answer to the question.
         #
         # user      - TriviaCrack::User
         # game      - TriviaCrack::Game

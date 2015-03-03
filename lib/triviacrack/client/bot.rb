@@ -3,6 +3,8 @@ require "triviacrack"
 require "triviacrack/client/client"
 require "triviacrack/client/solvers/solver"
 
+# Public: A TriviaCrack Client that automatically solves questions for all of
+# the user's games.
 module TriviaCrack
   module Client
     class Bot < TriviaCrack::Client::Client
