@@ -1,5 +1,5 @@
-require "triviacrack/client/decision_modules/correct_answer"
-require "triviacrack/client/decision_modules/random_answer"
+require "triviacrack/client/solvers/correct_answer"
+require "triviacrack/client/solvers/random_answer"
 
 module TriviaCrack
   module Client

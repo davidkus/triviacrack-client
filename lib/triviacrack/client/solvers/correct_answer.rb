@@ -1,5 +1,3 @@
-require "triviacrack/question"
-
 module TriviaCrack
   module Client
     module Solvers

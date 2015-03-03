@@ -1,4 +1,5 @@
 require "triviacrack"
+
 require "triviacrack/client/client"
 require "triviacrack/client/solvers/solver"
 
@@ -21,10 +22,17 @@ module TriviaCrack
       def play(solver, start_new_games)
         @solver = TriviaCrack::Client::Solvers.get_solver(solver)
 
+        if !@solver.respond_to? :solve
+          puts "Solver does not have a solve method."
+          exit
+        end
+
         begin
           puts "Starting to play Trivia Crack as #{@username}."
 
           loop do
+            @user = @client.get_user
+
             if @user.start_new_game? && start_new_games
               start_new_game
             end
@@ -39,7 +47,7 @@ module TriviaCrack
               puts "No games available to play."
             end
 
-            sleep 60
+            sleep POLL_TIME
           end
         rescue TriviaCrack::Errors::RequestError => e
           puts "Request to the Trivia Crack API failed with code #{e.code}."
@@ -47,6 +55,15 @@ module TriviaCrack
       end
 
       private
+
+      # Internal: The amount of time to wait before checking for new games.
+      POLL_TIME = 60
+
+      # Internal: The maximum amount of time to wait between questions.
+      QUESTION_DELAY_MAX = 10
+
+      # Internal: The minimum amount of time to wait between questions.
+      QUESTION_DELAY_MIN = 1
 
       # Internal: Plays the given game to completion.
       #
@@ -64,44 +81,25 @@ module TriviaCrack
         while game.playable? do
           # Sleep for a random number of seconds, so responses are not all
           # instantaneous and seem more natural.
-          sleep_time = Random.rand(1..10)
+          sleep_time = Random.rand(QUESTION_DELAY_MIN..QUESTION_DELAY_MAX)
           puts "\nWaiting #{sleep_time} seconds before the next question...\n\n"
 
           sleep sleep_time
 
           question = game.questions.first
-          answer = @solver.solve(@user, game, question)
+          answer = @solver.solve @user, game, question
 
           puts " Category : #{question.category}"
           puts " Question : #{question.text}"
           print "   Answer : #{question.answers[answer]}"
 
-          result = @client.answer_question game.id, question, answer
+          game, result = @client.answer_question game.id, question, answer
 
-          if result[:correct_answer]
-            puts " - You answered correctly!"
-          else
-            puts " - You answered incorretly!"
-          end
-
-          game = result[:game]
+          puts result ? " - Correct!" : " - Incorret!"
         end
 
         puts "Finished playing game #{game.id}. Status: #{game.game_status}."
 
-      end
-
-      # Internal: Starts a new game.
-      #
-      # Examples
-      #
-      #   start_new_game
-      #
-      # Returns nothing.
-      def start_new_game
-        puts "Starting a new game."
-
-        @client.start_new_game
       end
 
     end
