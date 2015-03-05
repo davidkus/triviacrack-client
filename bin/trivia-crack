@@ -19,6 +19,16 @@ class TriviaCrackClient < Thor
     bot.play options[:solver], options[:start_new_games]
   end
 
+  desc "play", "Play Trivia Crack."
+  method_option :email, aliases: "-e", require: true,
+                desc: "Your Trivia Crack account email."
+  method_option :password, aliases: "-p", require: true,
+                desc: "Your Trivia Crack account password."
+  def play
+    client = TriviaCrack::Client::Manual.new options[:email], options[:password]
+    client.play
+  end
+
 end
 
 TriviaCrackClient.start
