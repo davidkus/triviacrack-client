@@ -13,6 +13,7 @@ module TriviaCrack
           @user_id, @username = @client.login(email, password)
         rescue TriviaCrack::Errors::RequestError => e
           puts "Unable to log in to Trivia Crack server. Error: #{e.code}"
+          exit
         end
       end
 

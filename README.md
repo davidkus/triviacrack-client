@@ -1,31 +1,53 @@
 # TriviaCrack Client
 
-A bot that plays the popular social game Trivia Crack. Running the bot will go through all games which are currently on your turn and play them to completion.
+A bot that plays the popular social game Trivia Crack. Running the bot will go
+through all games which are currently on your turn and play them to completion.
 
 ## Installation
 
-Add this line to your application's Gemfile:
+Using docker-compose:
 
-```ruby
-gem 'triviacrack-client'
+```
+$ docker-compose build
+$ docker-compose run triviacrack
 ```
 
-And then execute:
+To build using docker:
 
-    $ bundle
-
-Or install it yourself as:
-
-    $ gem install triviacrack-client
+```
+$ docker build -t image-name .
+```
 
 ## Usage
 
+### Bot
+
 To run the bot, execute:
 
-$ trivia-crack bot -e EMAIL -p PASSWORD
+```
+$ bin/trivia-crack bot -e email -p password
+```
 
-- EMAIL is the e-mail you use to sign in to Trivia Crack (e.g. user@example.com).
-- PASSWORD is your Trivia Crack account password.
+- email is the e-mail you use to sign in to Trivia Crack (e.g. user@example.com).
+- password is your Trivia Crack account password.
+
+To deploy with docker:
+
+```
+$ docker run -d -e EMAIL=email -e PASSWORD=password image-name
+```
+
+### Manual Play
+
+Included is a CLI client that lets you manually input the answers to questions.
+To run this client, execute:
+
+```
+$ bin/trivia-crack play -e email -p password
+```
+
+Note: Currently, images are not display (for questions which include images).
+
 
 ## Contributing
 

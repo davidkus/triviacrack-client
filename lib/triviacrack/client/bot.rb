@@ -1,7 +1,7 @@
 require "triviacrack"
 
-require "triviacrack/client/client"
-require "triviacrack/client/solvers/solver"
+require_relative "client"
+require_relative "solvers/solver"
 
 # Public: A TriviaCrack Client that automatically solves questions for all of
 # the user's games.

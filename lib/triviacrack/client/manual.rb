@@ -1,7 +1,7 @@
 require "highline/import"
 require "triviacrack"
 
-require "triviacrack/client/client"
+require_relative "client"
 
 # Public: A TriviaCrack Client that lets you play the game manually.
 module TriviaCrack

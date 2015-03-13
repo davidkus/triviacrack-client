@@ -1,4 +1,4 @@
-require "triviacrack/client/version"
+require_relative "client/version"
 
-require "triviacrack/client/bot"
-require "triviacrack/client/manual"
+require_relative "client/bot"
+require_relative "client/manual"

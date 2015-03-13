@@ -1,0 +1,5 @@
+triviacrack:
+  build: .
+  command: /bin/bash
+  volumes:
+   - .:/code

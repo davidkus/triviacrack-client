@@ -1,7 +1,8 @@
 #!/usr/bin/env ruby
 
 require "thor"
-require "triviacrack/client"
+
+require_relative "../lib/triviacrack/client"
 
 class TriviaCrackClient < Thor
 

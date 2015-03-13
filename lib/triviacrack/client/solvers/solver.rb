@@ -1,5 +1,5 @@
-require "triviacrack/client/solvers/correct_answer"
-require "triviacrack/client/solvers/random_answer"
+require_relative "correct_answer"
+require_relative "random_answer"
 
 # Internal: Methods for the Solvers module.
 module TriviaCrack
