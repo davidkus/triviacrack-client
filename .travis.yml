@@ -1,0 +1,8 @@
+language: ruby
+script: bundle exec rake spec
+rvm:
+- 2.2.1
+addons:
+  code_climate:
+    repo_token:
+      secure: N8tKQh2bNdMPAEiP4VlEZP1nyFluHimjs4ohyY5Q8I4T5FOwxEfZ791v1kfbMAn6AdwdlcF+UeeEsX2WxmTK5MJzwYs9JFmB3FhPJf1ojZkswFHPZ8F18uKTMWhG/fo0hIxqUFSbWrlbr3YXtAPoKnJlYFuJJd0GaAIjRc1MSWg=
