@@ -2,22 +2,20 @@ require "spec_helper"
 
 describe TriviaCrack::Client::Solvers do
 
-  let(:user) { double(id: 111) }
-  let(:game) { double(id: 1111) }
-  let(:question) { double(correct_answer: 1) }
+  describe '.get_solver' do
 
-  describe ".get_solver" do
-    it "returns a CorrectAnswer solver" do
-      solver = TriviaCrack::Client::Solvers.get_solver "CorrectAnswer"
+    subject { TriviaCrack::Client::Solvers.get_solver solver_name }
 
-      expect(solver).to be_a TriviaCrack::Client::Solvers::CorrectAnswer
+    context 'given that we request a CorrectAnswer solver' do
+      let(:solver_name) { "CorrectAnswer" }
+
+      it { is_expected.to be_a TriviaCrack::Client::Solvers::CorrectAnswer }
     end
 
-    it "returns a RandomAnswer solver" do
-      solver = TriviaCrack::Client::Solvers.get_solver "RandomAnswer"
+    context 'given that we request a RandomAnswer solver' do
+      let(:solver_name) { "RandomAnswer" }
 
-      expect(solver).to be_a TriviaCrack::Client::Solvers::RandomAnswer
+      it { is_expected.to be_a TriviaCrack::Client::Solvers::RandomAnswer }
     end
   end
-
 end
