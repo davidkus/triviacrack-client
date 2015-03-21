@@ -29,30 +29,26 @@ module TriviaCrack
           exit
         end
 
-        begin
-          puts "Starting to play Trivia Crack as #{@username}."
+        puts "Starting to play Trivia Crack as #{@username}."
 
-          loop do
-            @user = @client.get_user
+        loop do
+          @user = @client.get_user
 
-            if @user.start_new_game? && start_new_games
-              start_new_game
-            end
-
-            puts "Fetching games for #{@username}..."
-
-            playable_games = @client.get_games.select { |game| game.playable? }
-
-            playable_games.each { |game| play_game game }
-
-            if playable_games.none?
-              puts "No games available to play."
-            end
-
-            sleep POLL_TIME
+          if @user.start_new_game? && start_new_games
+            start_new_game
           end
-        rescue TriviaCrack::Errors::RequestError => e
-          puts "Request to the Trivia Crack API failed with code #{e.code}."
+
+          puts "Fetching games for #{@username}..."
+
+          playable_games = @client.get_games.select { |game| game.playable? }
+
+          playable_games.each { |game| play_game game }
+
+          if playable_games.none?
+            puts "No games available to play."
+          end
+
+          sleep POLL_TIME
         end
       end
 
