@@ -6,6 +6,4 @@ ADD . /code
 
 RUN bundle install
 
-ENTRYPOINT ["bundle", "exec"]
-
-CMD bin/trivia-crack bot -e $EMAIL -p $PASSWORD
+CMD bundle exec bin/trivia-crack bot -e $EMAIL -p $PASSWORD -n -f

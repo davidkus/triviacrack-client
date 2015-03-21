@@ -1,4 +1,4 @@
-triviacrack:
+client:
   build: .
   command: /bin/bash
   volumes:
