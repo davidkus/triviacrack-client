@@ -8,13 +8,11 @@ module TriviaCrack
       # Public: Initializes a TriviaCrack API Client and logs in with the given
       # email and password.
       def initialize(email, password)
-        begin
-          @client = TriviaCrack::API::Client.new
-          @user_id, @username = @client.login(email, password)
-        rescue TriviaCrack::Errors::RequestError => e
-          puts "Unable to log in to Trivia Crack server. Error: #{e.code}"
-          exit
-        end
+        @client = TriviaCrack::API::Client.new
+        session = @client.login(email, password)
+
+        @user_id = session.user_id
+        @username = session.username
       end
 
       private
@@ -25,7 +23,7 @@ module TriviaCrack
       #
       #   start_new_game
       #
-      # Returns nothing.
+      # Returns the TriviaCrack::Game that was started.
       def start_new_game
         say "\nStarting a new game."
         @client.start_new_game
