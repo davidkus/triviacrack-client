@@ -15,9 +15,10 @@ class TriviaCrackClient < Thor
                 desc: "Whether or not to start new games"
   method_option :solver, aliases: "-s", default: "CorrectAnswer",
                 desc: "Solver that decides which answer to user."
+  method_option :forever, aliases: "-f", default: false,
+                desc: "Restarts the bot on exceptions, keeping it running"
   def bot
-    bot = TriviaCrack::Client::Bot.new options[:email], options[:password]
-    bot.play options[:solver], options[:start_new_games]
+    start_bot
   end
 
   desc "play", "Play Trivia Crack."
@@ -28,6 +29,27 @@ class TriviaCrackClient < Thor
   def play
     client = TriviaCrack::Client::Manual.new options[:email], options[:password]
     client.play
+  end
+
+  private
+
+  def start_bot
+    begin
+      bot = TriviaCrack::Client::Bot.new options[:email], options[:password]
+      bot.play options[:solver], options[:start_new_games]
+    rescue Exception => e
+      if options[:forever]
+        puts e.message
+
+        puts "Restarting bot in 10 seconds..."
+
+        sleep 10
+
+        start_bot
+      else
+        throw e
+      end
+    end
   end
 
 end
