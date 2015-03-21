@@ -150,8 +150,14 @@ module TriviaCrack
         answer = -1
 
         choose do |menu|
-          menu.header = "\nCategory: #{question.category}" <<
+          header_text = "\nCategory: #{question.category}" <<
                         "\nQuestion: #{question.text}"
+
+          if question.media_type == :image
+            header_text << "\nImage URL: #{question.image_url}"
+          end
+
+          menu.header = header_text
 
           question.answers.each_index do |i|
             menu.choice question.answers[i] { answer = i }
