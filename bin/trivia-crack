@@ -7,24 +7,24 @@ require_relative "../lib/triviacrack/client"
 class TriviaCrackClient < Thor
 
   desc "bot", "Run the Trivia Crack bot."
-  method_option :email, aliases: "-e", require: true,
+  method_option :email, type: :string, aliases: "-e", require: true,
                 desc: "Your Trivia Crack account email."
-  method_option :password, aliases: "-p", require: true,
+  method_option :password, type: :string, aliases: "-p", require: true,
                 desc: "Your Trivia Crack account password."
-  method_option :start_new_games, aliases: "-n", default: false,
+  method_option :start_new_games, type: :boolean, aliases: "-n", default: false,
                 desc: "Whether or not to start new games"
-  method_option :solver, aliases: "-s", default: "CorrectAnswer",
+  method_option :solver, type: :string, aliases: "-s", default: "CorrectAnswer",
                 desc: "Solver that decides which answer to user."
-  method_option :forever, aliases: "-f", default: false,
+  method_option :forever, type: :boolean, aliases: "-f", default: false,
                 desc: "Restarts the bot on exceptions, keeping it running"
   def bot
     start_bot
   end
 
   desc "play", "Play Trivia Crack."
-  method_option :email, aliases: "-e", require: true,
+  method_option :email, type: :string, aliases: "-e", require: true,
                 desc: "Your Trivia Crack account email."
-  method_option :password, aliases: "-p", require: true,
+  method_option :password, type: :string, aliases: "-p", require: true,
                 desc: "Your Trivia Crack account password."
   def play
     client = TriviaCrack::Client::Manual.new options[:email], options[:password]
