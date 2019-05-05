@@ -34,20 +34,17 @@ class TriviaCrackClient < Thor
   private
 
   def start_bot
-    begin
-      bot = TriviaCrack::Client::Bot.new options[:email], options[:password]
-      bot.play options[:solver], options[:start_new_games]
-    rescue Exception => e
-      if options[:forever]
+    loop do
+      begin
+        bot = TriviaCrack::Client::Bot.new options[:email], options[:password]
+        bot.play options[:solver], options[:start_new_games]
+      rescue Exception => e
         puts e.message
-
+        puts e.backtrace
+      ensure
+        break unless options[:forever]
         puts "Restarting bot in 10 seconds..."
-
         sleep 10
-
-        start_bot
-      else
-        throw e
       end
     end
   end
