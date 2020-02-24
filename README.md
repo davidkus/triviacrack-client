@@ -1,4 +1,4 @@
-# TriviaCrack Client [![Build Status](https://travis-ci.org/davidkus/triviacrack-client.svg?branch=master)](https://travis-ci.org/davidkus/triviacrack-client) [![Code Climate](https://codeclimate.com/github/davidkus/triviacrack-client/badges/gpa.svg)](https://codeclimate.com/github/davidkus/triviacrack-client) [![Test Coverage](https://codeclimate.com/github/davidkus/triviacrack-client/badges/coverage.svg)](https://codeclimate.com/github/davidkus/triviacrack-client)
+# TriviaCrack Client ![CI](https://github.com/davidkus/triviacrack-client/workflows/CI/badge.svg) [![Code Climate](https://codeclimate.com/github/davidkus/triviacrack-client/badges/gpa.svg)](https://codeclimate.com/github/davidkus/triviacrack-client) [![Test Coverage](https://codeclimate.com/github/davidkus/triviacrack-client/badges/coverage.svg)](https://codeclimate.com/github/davidkus/triviacrack-client)
 
 A bot that plays the popular social game Trivia Crack. Running the bot will go
 through all games which are currently on your turn and play them to completion.
