@@ -1,22 +1,21 @@
-#ruby=ruby-2.4.1
+#ruby=ruby-2.6.5
 #ruby-gemset=triviacrack-client
 
 source 'https://rubygems.org'
 
-gem "triviacrack"
+gem "triviacrack", "~> 0.2.0"
 
-gem "bundler", "~> 1.7"
+gem "bundler", "~> 2.1.4"
 
-gem "rake", "~> 10.0"
+gem "rake", "~> 13.0.1"
 
-gem "thor", "~> 0.19.1"
-gem "highline", "~> 1.7.0"
+gem "thor", "~> 1.0.1"
+gem "highline", "~> 2.0.3"
 
 group :development, :test do
-  gem "byebug", "~> 3.5.1"
-  gem 'simplecov', '~> 0.15.1'
-  gem 'codeclimate-test-reporter', '~> 0.4.7'
-  gem "rspec", "~> 3.2.0"
-  gem "rspec-its", "~> 1.2.0"
-  gem "fuubar", "~> 2.0.0"
+  gem "byebug", "~> 11.1.1"
+  gem 'simplecov', '~> 0.17.1'
+  gem "rspec", "~> 3.9.0"
+  gem "rspec-its", "~> 1.3.0"
+  gem "fuubar", "~> 2.5.0"
 end
