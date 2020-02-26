@@ -9,7 +9,7 @@ Using docker-compose:
 
 ```
 $ docker-compose build
-$ docker-compose run triviacrack
+$ docker-compose run client
 ```
 
 To build using docker:
