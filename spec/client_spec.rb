@@ -30,7 +30,7 @@ describe TriviaCrack::Client::Client do
     end
 
     context 'given that the login fails' do
-      before { allow(api_client).to receive(:login).and_raise TriviaCrack::Errors::RequestError, 400 }
+      before { allow(api_client).to receive(:login).and_raise TriviaCrack::Errors::RequestError.new(400, '/api/login', 'some message') }
 
       specify { expect{ subject }.to raise_error TriviaCrack::Errors::RequestError }
     end
