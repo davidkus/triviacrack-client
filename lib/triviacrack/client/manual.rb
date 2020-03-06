@@ -24,7 +24,7 @@ module TriviaCrack
             show_main_menu
           end
         rescue TriviaCrack::Errors::RequestError => e
-          puts "Request to the Trivia Crack API failed with code #{e.code}"
+          puts "#{e.message} #{e.body}"
         end
       end
 

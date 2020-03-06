@@ -3,7 +3,7 @@
 
 source 'https://rubygems.org'
 
-gem "triviacrack", "~> 0.2.0"
+gem "triviacrack", "~> 0.3.2"
 
 gem "bundler", "~> 2.1.4"
 

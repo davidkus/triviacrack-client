@@ -38,6 +38,9 @@ class TriviaCrackClient < Thor
       begin
         bot = TriviaCrack::Client::Bot.new options[:email], options[:password]
         bot.play options[:solver], options[:start_new_games]
+      rescue TriviaCrack::Errors::RequestError => e
+        puts "#{e.message} #{e.body}"
+        puts e.backtrace
       rescue Exception => e
         puts e.message
         puts e.backtrace
