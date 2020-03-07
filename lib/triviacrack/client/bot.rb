@@ -89,14 +89,19 @@ module TriviaCrack
 
           puts " Category : #{question.category}"
           puts " Question : #{question.text}"
-          print "   Answer : #{question.answers[answer]}"
+          puts "   Answer : #{question.answers[answer]}"
 
-          game, result = @client.answer_question game.id, question, answer
+          begin
+            game, result = @client.answer_question game.id, question, answer
+          rescue Exception => e
+            puts "\n#{game.inspect}" if @debug
+            raise e
+          end
 
-          puts result ? " - Correct!" : " - Incorret!"
+          puts result ? "-> Correct!" : " -> Incorret!"
         end
 
-        puts "Finished playing game #{game.id}. Status: #{game.game_status}."
+        puts "\nFinished playing game #{game.id}. Status: #{game.game_status}."
 
       end
 

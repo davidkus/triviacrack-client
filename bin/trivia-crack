@@ -17,6 +17,8 @@ class TriviaCrackClient < Thor
                 desc: "Solver that decides which answer to user."
   method_option :forever, type: :boolean, aliases: "-f", default: false,
                 desc: "Restarts the bot on exceptions, keeping it running"
+  method_option :debug, type: :boolean, default: false,
+                desc: "Enhanced output to help with debugging"
   def bot
     start_bot
   end
@@ -36,14 +38,14 @@ class TriviaCrackClient < Thor
   def start_bot
     loop do
       begin
-        bot = TriviaCrack::Client::Bot.new options[:email], options[:password]
+        bot = TriviaCrack::Client::Bot.new options[:email], options[:password], options[:debug]
         bot.play options[:solver], options[:start_new_games]
       rescue TriviaCrack::Errors::RequestError => e
         puts "#{e.message} #{e.body}"
-        puts e.backtrace
+        puts e.backtrace if options[:debug]
       rescue Exception => e
         puts e.message
-        puts e.backtrace
+        puts e.backtrace if options[:debug]
       ensure
         break unless options[:forever]
         puts "Restarting bot in 10 seconds..."

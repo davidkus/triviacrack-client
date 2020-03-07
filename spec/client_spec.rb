@@ -5,7 +5,7 @@ describe TriviaCrack::Client::Client do
   before { allow(TriviaCrack::API::Client).to receive(:new) { api_client } }
   before { allow(api_client).to receive(:login) { [user_id, username] } }
 
-  let(:client) { TriviaCrack::Client::Client.new email, password }
+  let(:client) { TriviaCrack::Client::Client.new email, password, false }
 
   let(:email) { "user@example.com" }
   let(:password) { "password123" }

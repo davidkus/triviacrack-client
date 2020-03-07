@@ -7,12 +7,14 @@ module TriviaCrack
 
       # Public: Initializes a TriviaCrack API Client and logs in with the given
       # email and password.
-      def initialize(email, password)
+      def initialize(email, password, debug)
         @client = TriviaCrack::API::Client.new
         session = @client.login(email, password)
 
         @user_id = session.user_id
         @username = session.username
+
+        @debug = debug
       end
 
       private
