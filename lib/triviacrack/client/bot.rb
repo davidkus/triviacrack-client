@@ -84,21 +84,28 @@ module TriviaCrack
 
           sleep sleep_time
 
-          question = game.questions.first
-          answer = @solver.solve @user, game, question
+          questions = if game.questions.first.type == :duel then game.questions else [game.questions.first] end
+          answers = {}
 
-          puts " Category : #{question.category}"
-          puts " Question : #{question.text}"
-          puts "   Answer : #{question.answers[answer]}"
+          for question in questions do
+            answer = @solver.solve @user, game, question
+
+            puts " Category : #{question.category}"
+            puts " Question : #{question.text}"
+            puts "   Answer : #{question.answers[answer]}"
+
+            answers[question.id] = answer
+          end
 
           begin
-            game, result = @client.answer_question game.id, question, answer
+            game, results = @client.answer_questions game.id, questions, answers
           rescue Exception => e
             puts "\n#{game.inspect}" if @debug
             raise e
           end
 
-          puts result ? "-> Correct!" : " -> Incorret!"
+          correct_answers = results.values.select { |v| v == true }.size
+          puts "Correct Answers: #{correct_answers} / #{results.size}"
         end
 
         puts "\nFinished playing game #{game.id}. Status: #{game.game_status}."

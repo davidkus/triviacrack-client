@@ -28,9 +28,19 @@ class TriviaCrackClient < Thor
                 desc: "Your Trivia Crack account email."
   method_option :password, type: :string, aliases: "-p", require: true,
                 desc: "Your Trivia Crack account password."
+  method_option :debug, type: :boolean, default: false,
+                desc: "Enhanced output to help with debugging"
   def play
-    client = TriviaCrack::Client::Manual.new options[:email], options[:password]
-    client.play
+    begin
+      client = TriviaCrack::Client::Manual.new options[:email], options[:password], options[:debug]
+      client.play
+    rescue TriviaCrack::Errors::RequestError => e
+      puts "#{e.message} #{e.body}"
+      puts e.backtrace if options[:debug]
+    rescue Exception => e
+      puts e.message
+      puts e.backtrace if options[:debug]
+    end
   end
 
   private
