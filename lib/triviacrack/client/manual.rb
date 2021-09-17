@@ -160,7 +160,9 @@ module TriviaCrack
           menu.header = header_text
 
           question.answers.each_index do |i|
-            menu.choice question.answers[i] { answer = i - 1 }
+            menu.choice question.answers[i] do
+               answer = i
+            end
           end
 
           menu.choice("Cancel") { keep_playing = false }
