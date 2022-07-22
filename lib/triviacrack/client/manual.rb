@@ -1,13 +1,14 @@
-require "highline/import"
-require "triviacrack"
+# frozen_string_literal: true
 
-require_relative "client"
+require 'highline/import'
+require 'triviacrack'
+
+require_relative 'client'
 
 # Public: A TriviaCrack Client that lets you play the game manually.
 module TriviaCrack
   module Client
     class Manual < TriviaCrack::Client::Client
-
       # Public: The main game loop.
       #
       # Examples
@@ -17,15 +18,13 @@ module TriviaCrack
       #
       # Returns nothing.
       def play
-        begin
-          loop do
-            @user = @client.get_user
+        loop do
+          @user = @client.get_user
 
-            show_main_menu
-          end
-        rescue TriviaCrack::Errors::RequestError => e
-          puts "#{e.message} #{e.body}"
+          show_main_menu
         end
+      rescue TriviaCrack::Errors::RequestError => e
+        puts "#{e.message} #{e.body}"
       end
 
       private
@@ -35,20 +34,18 @@ module TriviaCrack
       # Returns nothing.
       def show_main_menu
         choose do |menu|
-          menu.header = "\n@#{@user.username} - Lives: #{@user.lives}  " <<
+          menu.header = "\n@#{@user.username} - Lives: #{@user.lives}  " \
                         "~  Level: #{@user.level}"
 
-          menu.choice("List Games : My Turn") { list_games_my_turn }
+          menu.choice('List Games : My Turn') { list_games_my_turn }
 
-          menu.choice("List Games : Their Turn") { list_games_their_turn }
+          menu.choice('List Games : Their Turn') { list_games_their_turn }
 
-          menu.choice("List Games : Finished Games") { list_games_finished }
+          menu.choice('List Games : Finished Games') { list_games_finished }
 
-          if @user.start_new_game?
-            menu.choice("Start New Game") { start_new_game }
-          end
+          menu.choice('Start New Game') { start_new_game } if @user.start_new_game?
 
-          menu.choice("Quit") { exit }
+          menu.choice('Quit') { exit }
         end
       end
 
@@ -57,7 +54,7 @@ module TriviaCrack
       #
       # Returns nothing.
       def list_games_my_turn
-        playable_games = @client.get_games.select { |game| game.playable? }
+        playable_games = @client.get_games.select(&:playable?)
 
         if playable_games.none?
           say "\nThere are no games to play."
@@ -68,10 +65,10 @@ module TriviaCrack
           menu.header = "\nSelect a game to play"
 
           playable_games.each do |game|
-            menu.choice(game_text game) { play_game game }
+            menu.choice(game_text(game)) { play_game game }
           end
 
-          menu.choice "Cancel"
+          menu.choice 'Cancel'
         end
       end
 
@@ -85,7 +82,7 @@ module TriviaCrack
 
         if other_games.any?
           say "\n"
-          other_games.each { |game| say(game_text game) }
+          other_games.each { |game| say(game_text(game)) }
         else
           say "\nThere are no games waiting."
         end
@@ -101,7 +98,7 @@ module TriviaCrack
 
         if finished_games.any?
           say "\n"
-          finished_games.each { |game| say(game_text game) }
+          finished_games.each { |game| say(game_text(game)) }
         else
           say "\nThere are no finished games."
         end
@@ -133,7 +130,7 @@ module TriviaCrack
             menu.choice(crown) { result = crown }
           end
 
-          menu.choice("Cancel") { keep_playing = false }
+          menu.choice('Cancel') { keep_playing = false }
         end
 
         [result, keep_playing]
@@ -150,22 +147,20 @@ module TriviaCrack
         answer = -1
 
         choose do |menu|
-          header_text = "\nCategory: #{question.category}" <<
+          header_text = "\nCategory: #{question.category}" \
                         "\nQuestion: #{question.text}"
 
-          if question.media_type == :image
-            header_text << "\nImage URL: #{question.image_url}"
-          end
+          header_text << "\nImage URL: #{question.image_url}" if question.media_type == :image
 
           menu.header = header_text
 
           question.answers.each_index do |i|
             menu.choice question.answers[i] do
-               answer = i
+              answer = i
             end
           end
 
-          menu.choice("Cancel") { keep_playing = false }
+          menu.choice('Cancel') { keep_playing = false }
         end
 
         [answer, keep_playing]
@@ -207,12 +202,12 @@ module TriviaCrack
 
         keep_playing = true
 
-        while game.playable? && keep_playing do
+        while game.playable? && keep_playing
 
           if game.questions.first.type == :crown
             crown, keep_playing = list_categories game
 
-            break if !keep_playing
+            break unless keep_playing
 
             question = game.questions.select { |q| q.category == crown }.first
           else
@@ -221,14 +216,11 @@ module TriviaCrack
 
           answer, keep_playing = ask_question question
 
-          if keep_playing
-            game = submit_answer game, question, answer
-          end
+          game = submit_answer game, question, answer if keep_playing
         end
 
         say "\nDone playing game #{game.id}. Status: #{game.game_status}."
       end
-
     end
   end
 end

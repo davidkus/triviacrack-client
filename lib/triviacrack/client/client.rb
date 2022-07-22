@@ -1,10 +1,11 @@
-require "triviacrack"
+# frozen_string_literal: true
+
+require 'triviacrack'
 
 # Public: A base Trivia Crack client.
 module TriviaCrack
   module Client
     class Client
-
       # Public: Initializes a TriviaCrack API Client and logs in with the given
       # email and password.
       def initialize(email, password, debug)
@@ -30,7 +31,6 @@ module TriviaCrack
         say "\nStarting a new game."
         @client.start_new_game
       end
-
     end
   end
 end

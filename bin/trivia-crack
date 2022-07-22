@@ -1,69 +1,65 @@
 #!/usr/bin/env ruby
+# frozen_string_literal: true
 
-require "thor"
+require 'thor'
 
-require_relative "../lib/triviacrack/client"
+require_relative '../lib/triviacrack/client'
 
 class TriviaCrackClient < Thor
-
-  desc "bot", "Run the Trivia Crack bot."
-  method_option :email, type: :string, aliases: "-e", require: true,
-                desc: "Your Trivia Crack account email."
-  method_option :password, type: :string, aliases: "-p", require: true,
-                desc: "Your Trivia Crack account password."
-  method_option :start_new_games, type: :boolean, aliases: "-n", default: false,
-                desc: "Whether or not to start new games"
-  method_option :solver, type: :string, aliases: "-s", default: "CorrectAnswer",
-                desc: "Solver that decides which answer to user."
-  method_option :forever, type: :boolean, aliases: "-f", default: false,
-                desc: "Restarts the bot on exceptions, keeping it running"
+  desc 'bot', 'Run the Trivia Crack bot.'
+  method_option :email, type: :string, aliases: '-e', require: true,
+                        desc: 'Your Trivia Crack account email.'
+  method_option :password, type: :string, aliases: '-p', require: true,
+                           desc: 'Your Trivia Crack account password.'
+  method_option :start_new_games, type: :boolean, aliases: '-n', default: false,
+                                  desc: 'Whether or not to start new games'
+  method_option :solver, type: :string, aliases: '-s', default: 'CorrectAnswer',
+                         desc: 'Solver that decides which answer to user.'
+  method_option :forever, type: :boolean, aliases: '-f', default: false,
+                          desc: 'Restarts the bot on exceptions, keeping it running'
   method_option :debug, type: :boolean, default: false,
-                desc: "Enhanced output to help with debugging"
+                        desc: 'Enhanced output to help with debugging'
   def bot
     start_bot
   end
 
-  desc "play", "Play Trivia Crack."
-  method_option :email, type: :string, aliases: "-e", require: true,
-                desc: "Your Trivia Crack account email."
-  method_option :password, type: :string, aliases: "-p", require: true,
-                desc: "Your Trivia Crack account password."
+  desc 'play', 'Play Trivia Crack.'
+  method_option :email, type: :string, aliases: '-e', require: true,
+                        desc: 'Your Trivia Crack account email.'
+  method_option :password, type: :string, aliases: '-p', require: true,
+                           desc: 'Your Trivia Crack account password.'
   method_option :debug, type: :boolean, default: false,
-                desc: "Enhanced output to help with debugging"
+                        desc: 'Enhanced output to help with debugging'
   def play
-    begin
-      client = TriviaCrack::Client::Manual.new options[:email], options[:password], options[:debug]
-      client.play
-    rescue TriviaCrack::Errors::RequestError => e
-      puts "#{e.message} #{e.body}"
-      puts e.backtrace if options[:debug]
-    rescue Exception => e
-      puts e.message
-      puts e.backtrace if options[:debug]
-    end
+    client = TriviaCrack::Client::Manual.new options[:email], options[:password], options[:debug]
+    client.play
+  rescue TriviaCrack::Errors::RequestError => e
+    puts "#{e.message} #{e.body}"
+    puts e.backtrace if options[:debug]
+  rescue Exception => e # rubocop:disable Lint/RescueException
+    puts e.message
+    puts e.backtrace if options[:debug]
   end
 
   private
 
   def start_bot
     loop do
-      begin
-        bot = TriviaCrack::Client::Bot.new options[:email], options[:password], options[:debug]
-        bot.play options[:solver], options[:start_new_games]
-      rescue TriviaCrack::Errors::RequestError => e
-        puts "#{e.message} #{e.body}"
-        puts e.backtrace if options[:debug]
-      rescue Exception => e
-        puts e.message
-        puts e.backtrace if options[:debug]
-      ensure
-        break unless options[:forever]
-        puts "Restarting bot in 10 seconds..."
-        sleep 10
-      end
+      bot = TriviaCrack::Client::Bot.new options[:email], options[:password], options[:debug]
+      bot.play options[:solver], options[:start_new_games]
+    rescue TriviaCrack::Errors::RequestError => e
+      puts "#{e.message} #{e.body}"
+      puts e.backtrace if options[:debug]
+    rescue Exception => e # rubocop:disable Lint/RescueException
+      puts e.message
+      puts e.backtrace if options[:debug]
+    ensure
+      break unless options[:forever]
+
+      puts 'Restarting bot in 10 seconds...'
+      sleep 10
     end
   end
-
 end
 
 TriviaCrackClient.start
